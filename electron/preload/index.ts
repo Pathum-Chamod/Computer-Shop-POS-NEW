@@ -1,6 +1,20 @@
 import { ipcRenderer, contextBridge } from 'electron'
 
-// --------- Expose some API to the Renderer process ---------
+// ----------------------------------------------------------------------
+//  1. YOUR CUSTOM API (The "Bridge" for Inventory)
+// ----------------------------------------------------------------------
+const api = {
+  getProducts: () => ipcRenderer.invoke('get-products'),
+  addProduct: (data: any) => ipcRenderer.invoke('add-product', data)
+}
+
+// Expose this as 'window.api' so your React code can use it
+contextBridge.exposeInMainWorld('api', api)
+
+
+// ----------------------------------------------------------------------
+//  2. EXISTING TEMPLATE API (Do not remove)
+// ----------------------------------------------------------------------
 contextBridge.exposeInMainWorld('ipcRenderer', {
   on(...args: Parameters<typeof ipcRenderer.on>) {
     const [channel, listener] = args
@@ -18,12 +32,11 @@ contextBridge.exposeInMainWorld('ipcRenderer', {
     const [channel, ...omit] = args
     return ipcRenderer.invoke(channel, ...omit)
   },
-
-  // You can expose other APTs you need here.
-  // ...
 })
 
-// --------- Preload scripts loading ---------
+// ----------------------------------------------------------------------
+//  3. LOADING ANIMATION LOGIC (Keeps the app smooth)
+// ----------------------------------------------------------------------
 function domReady(condition: DocumentReadyState[] = ['complete', 'interactive']) {
   return new Promise(resolve => {
     if (condition.includes(document.readyState)) {
@@ -51,12 +64,6 @@ const safeDOM = {
   },
 }
 
-/**
- * https://tobiasahlin.com/spinkit
- * https://connoratherton.com/loaders
- * https://projects.lukehaas.me/css-loaders
- * https://matejkustec.github.io/SpinThatShit
- */
 function useLoading() {
   const className = `loaders-css__square-spin`
   const styleContent = `
@@ -105,8 +112,6 @@ function useLoading() {
     },
   }
 }
-
-// ----------------------------------------------------------------------
 
 const { appendLoading, removeLoading } = useLoading()
 domReady().then(appendLoading)

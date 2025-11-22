@@ -1,11 +1,38 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client"
-  output   = "../generated/prisma"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "darwin", "darwin-arm64"]
 }
 
 datasource db {
   provider = "sqlite"
+  // Stable version NEEDS this line:
+  url      = "file:./shop.db"
+}
+
+// ... (Your Category, Product, StockItem models below)
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  brand       String   
+  price       Decimal  
+  cost        Decimal  
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  stockItems  StockItem[]
+  createdAt   DateTime @default(now())
+}
+
+model StockItem {
+  id           Int      @id @default(autoincrement())
+  serialNumber String   @unique 
+  status       String   @default("AVAILABLE") 
+  productId    Int
+  product      Product  @relation(fields: [productId], references: [id])
+  addedAt      DateTime @default(now())
 }
