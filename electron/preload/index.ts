@@ -5,7 +5,11 @@ import { ipcRenderer, contextBridge } from 'electron'
 // ----------------------------------------------------------------------
 const api = {
   getProducts: () => ipcRenderer.invoke('get-products'),
-  addProduct: (data: any) => ipcRenderer.invoke('add-product', data)
+  addProduct: (data: any) => ipcRenderer.invoke('add-product', data),
+  
+  // ADD THIS LINE: This allows your React code to call ANY backend function
+  // by name (like 'update-product' or 'delete-product').
+  invoke: (channel: string, data: any) => ipcRenderer.invoke(channel, data) 
 }
 
 // Expose this as 'window.api' so your React code can use it

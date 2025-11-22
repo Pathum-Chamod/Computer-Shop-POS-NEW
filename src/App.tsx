@@ -1,215 +1,181 @@
-import { useEffect, useState } from 'react'
-import { Plus, Search, Package, Monitor, Cpu } from 'lucide-react'
+import { useState } from 'react'
+import { Receipt, PackageCheck, BarChart3, ShieldCheck } from 'lucide-react'
 
-// Shadcn UI Components
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+// Components
+import { InventoryPage } from "./components/InventoryPage"
+import { SalesPage } from "./components/SalesPage"
+import { HistoryPage } from "./components/HistoryPage" // Import the new page
+import { Navbar } from "./components/Navbar"
+import { ShootingStars } from "./components/ShootingStars"
+import { StarsBackground } from "./components/stars-background"
 
 function App() {
-  const [products, setProducts] = useState([])
-  const [isOpen, setIsOpen] = useState(false)
+  // VIEW MODES: 'dashboard' (Landing) | 'workspace' (App Interface)
+  const [viewMode, setViewMode] = useState<'dashboard' | 'workspace'>('dashboard')
   
-  // Form State
-  const [formData, setFormData] = useState({
-    name: '',
-    brand: '',
-    categoryName: '',
-    price: '',
-    cost: ''
-  })
+  // WORKSPACE PAGES: 'sales' | 'inventory' | 'history'
+  const [activePage, setActivePage] = useState('sales')
 
-  useEffect(() => {
-    loadProducts()
-  }, [])
-
-  const loadProducts = async () => {
-    try {
-      const data = await (window as any).api.getProducts()
-      setProducts(data)
-    } catch (err) {
-      console.error("Failed to load products", err)
-    }
+  // Navigation Handlers
+  const enterWorkspace = (page: string) => {
+    setActivePage(page)
+    setViewMode('workspace')
   }
 
-  const handleSave = async () => {
-    try {
-      await (window as any).api.addProduct(formData)
-      await loadProducts()
-      setIsOpen(false)
-      setFormData({ name: '', brand: '', categoryName: '', price: '', cost: '' })
-    } catch (err) {
-      alert("Failed to save product")
-    }
+  const exitWorkspace = () => {
+    setViewMode('dashboard')
   }
+
+  // Define Dashboard Cards
+  const mainCards = [
+    { 
+      title: "Billing", 
+      desc: "New Sales & Invoices", 
+      icon: Receipt, 
+      color: "text-blue-400", 
+      bg: "bg-blue-500/10", 
+      border: "border-blue-500/20",
+      action: () => enterWorkspace('sales') 
+    },
+    { 
+      title: "Inventory", 
+      desc: "Stock In & Adjustments", 
+      icon: PackageCheck, 
+      color: "text-emerald-400", 
+      bg: "bg-emerald-500/10", 
+      border: "border-emerald-500/20",
+      action: () => enterWorkspace('inventory')
+    },
+    { 
+      title: "Analyzer", 
+      desc: "Reports & Analytics", 
+      icon: BarChart3, 
+      color: "text-purple-400", 
+      bg: "bg-purple-500/10", 
+      border: "border-purple-500/20",
+      action: () => console.log("Navigate to Analyzer")
+    },
+    { 
+      title: "Warranty", 
+      desc: "RMA & Claims", 
+      icon: ShieldCheck, 
+      color: "text-orange-400", 
+      bg: "bg-orange-500/10", 
+      border: "border-orange-500/20",
+      action: () => console.log("Navigate to Warranty")
+    }
+  ]
 
   return (
-    <div className="p-8 min-h-screen text-slate-100 font-sans selection:bg-blue-500/30">
+    <div className="min-h-screen text-slate-100 font-sans selection:bg-blue-500/30 relative overflow-hidden flex flex-col">
       
-      {/* TOP BAR */}
-      <div className="flex justify-between items-end mb-10">
-        <div>
-          <h1 className="text-4xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300 text-glow">
-            NEXUS POS
-          </h1>
-          <p className="text-slate-400 mt-1 font-medium tracking-wide">SYSTEM STATUS: <span className="text-green-400">ONLINE</span></p>
-        </div>
+      {/* --- GLOBAL BACKGROUND --- */}
+      <div className="fixed inset-0 z-0 pointer-events-none bg-[#030712]">
+        <StarsBackground 
+          starDensity={0.0003} 
+          allStarsTwinkle={true} 
+          twinkleProbability={0.8} 
+          minTwinkleSpeed={0.8} 
+          maxTwinkleSpeed={1.2}
+        />
+        <ShootingStars 
+          minSpeed={15} 
+          maxSpeed={40} 
+          minDelay={3000} 
+          maxDelay={8000}
+          starColor="#60a5fa" 
+          trailColor="#3b82f6"
+        />
+      </div>
 
-        {/* GLOWING ADD BUTTON */}
-        <Dialog open={isOpen} onOpenChange={setIsOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-blue-600 hover:bg-blue-500 text-white btn-glow px-6 py-6 text-md font-bold rounded-xl">
-              <Plus className="mr-2 h-5 w-5" /> NEW ENTRY
-            </Button>
-          </DialogTrigger>
+      {/* =========================================
+          MODE 1: DASHBOARD (LANDING)
+         ========================================= */}
+      {viewMode === 'dashboard' && (
+        <div className="relative z-10 flex-1 flex flex-col p-12 animate-in fade-in zoom-in-95 duration-500">
           
-          {/* POPUP MODAL */}
-          <DialogContent className="bg-slate-900 border-slate-700 text-slate-100">
-            <DialogHeader>
-              <DialogTitle className="text-xl text-blue-400">Add Inventory Item</DialogTitle>
-            </DialogHeader>
-            
-            <div className="grid gap-6 py-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-slate-400">Product Name</Label>
-                  <Input 
-                    className="bg-slate-950 border-slate-800 focus:border-blue-500 focus:ring-blue-500/20"
-                    placeholder="e.g. RTX 4090" 
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-slate-400">Brand</Label>
-                  <Input 
-                    className="bg-slate-950 border-slate-800 focus:border-blue-500"
-                    placeholder="e.g. ASUS" 
-                    value={formData.brand}
-                    onChange={(e) => setFormData({...formData, brand: e.target.value})}
-                  />
-                </div>
+          {/* HEADER */}
+          <div className="flex justify-between items-center mb-16">
+            <div>
+              <h1 className="text-7xl font-black tracking-tighter text-white drop-shadow-[0_0_30px_rgba(59,130,246,0.4)]">
+                CODEWAVE <span className="text-blue-500">POS</span>
+              </h1>
+              <div className="flex items-center gap-2 mt-4 pl-2">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                </span>
+                <p className="text-slate-400 font-bold text-xs tracking-[0.3em] uppercase">System Online & Ready</p>
               </div>
-
-              <div className="space-y-2">
-                <Label className="text-slate-400">Category</Label>
-                <Input 
-                  className="bg-slate-950 border-slate-800 focus:border-blue-500"
-                  placeholder="e.g. GPU" 
-                  value={formData.categoryName}
-                  onChange={(e) => setFormData({...formData, categoryName: e.target.value})}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-slate-400">Selling Price ($)</Label>
-                  <Input 
-                    className="bg-slate-950 border-slate-800 focus:border-blue-500 text-green-400 font-mono"
-                    type="number" 
-                    placeholder="0.00" 
-                    value={formData.price}
-                    onChange={(e) => setFormData({...formData, price: e.target.value})}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-slate-400">Cost Price ($)</Label>
-                  <Input 
-                    className="bg-slate-950 border-slate-800 focus:border-blue-500 font-mono"
-                    type="number" 
-                    placeholder="0.00" 
-                    value={formData.cost}
-                    onChange={(e) => setFormData({...formData, cost: e.target.value})}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <Button onClick={handleSave} className="w-full bg-blue-600 hover:bg-blue-500 btn-glow py-6 font-bold text-lg">
-              CONFIRM ENTRY
-            </Button>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {/* STATS CARDS */}
-      <div className="grid grid-cols-3 gap-6 mb-8">
-        <div className="glass-card p-6 rounded-2xl border-l-4 border-blue-500">
-          <div className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-1">Total Stock Value</div>
-          <div className="text-3xl font-black text-white">$45,200.00</div>
-        </div>
-        <div className="glass-card p-6 rounded-2xl border-l-4 border-purple-500">
-          <div className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-1">Items in Stock</div>
-          <div className="text-3xl font-black text-white">{products.length} Units</div>
-        </div>
-        <div className="glass-card p-6 rounded-2xl border-l-4 border-green-500">
-          <div className="text-slate-400 text-sm font-medium uppercase tracking-wider mb-1">Today's Sales</div>
-          <div className="text-3xl font-black text-white">$0.00</div>
-        </div>
-      </div>
-
-      {/* MAIN TABLE */}
-      <Card className="glass-card border-none rounded-2xl overflow-hidden">
-        <CardHeader className="border-b border-white/5 bg-white/5 pb-4">
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-lg font-bold tracking-wide flex items-center gap-2">
-              <Monitor className="text-blue-400" /> LIVE INVENTORY
-            </CardTitle>
-            <div className="relative w-72">
-              <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-500" />
-              <Input 
-                placeholder="Search database..." 
-                className="pl-10 bg-black/20 border-white/10 focus:border-blue-500 rounded-xl" 
-              />
             </div>
           </div>
-        </CardHeader>
-        <CardContent className="p-0">
-          <Table>
-            <TableHeader className="bg-black/20">
-              <TableRow className="border-white/5 hover:bg-transparent">
-                <TableHead className="text-slate-400 font-bold">ITEM NAME</TableHead>
-                <TableHead className="text-slate-400 font-bold">BRAND</TableHead>
-                <TableHead className="text-slate-400 font-bold">CATEGORY</TableHead>
-                <TableHead className="text-right text-slate-400 font-bold">PRICE</TableHead>
-                <TableHead className="text-right text-slate-400 font-bold">STOCK</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {products.length === 0 ? (
-                <TableRow className="border-white/5 hover:bg-transparent">
-                  <TableCell colSpan={5} className="text-center h-64 text-slate-500">
-                    <div className="flex flex-col items-center justify-center">
-                      <Cpu className="h-12 w-12 mb-4 text-slate-700 animate-pulse" />
-                      <p className="text-lg font-medium">System Empty</p>
-                      <p className="text-sm opacity-50">Add inventory to begin tracking</p>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ) : (
-                products.map((product: any) => (
-                  <TableRow key={product.id} className="border-white/5 hover:bg-white/5 transition-colors">
-                    <TableCell className="font-bold text-white">{product.name}</TableCell>
-                    <TableCell className="text-slate-300">{product.brand}</TableCell>
-                    <TableCell>
-                      <span className="inline-flex items-center rounded-md border border-blue-500/30 bg-blue-500/10 px-2.5 py-0.5 text-xs font-medium text-blue-400">
-                        {product.category?.name}
-                      </span>
-                    </TableCell>
-                    <TableCell className="text-right font-mono text-green-400 font-bold text-lg">
-                      ${Number(product.price).toFixed(2)}
-                    </TableCell>
-                    <TableCell className="text-right text-slate-300">{product.stockItems?.length || 0}</TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+
+          {/* CARDS */}
+          <div className="flex-1 flex items-center justify-center pb-20">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl">
+              {mainCards.map((card, i) => (
+                <div 
+                  key={i} 
+                  onClick={card.action}
+                  className={`nexus-panel h-80 p-8 rounded-3xl relative overflow-hidden group hover:bg-white/[0.05] transition-all cursor-pointer border ${card.border} hover:border-opacity-100 hover:-translate-y-4 hover:shadow-2xl flex flex-col justify-between backdrop-blur-md`}
+                >
+                  <div className={`p-5 rounded-2xl w-fit ${card.bg} transition-transform group-hover:scale-110 duration-500`}>
+                    <card.icon className={`h-12 w-12 ${card.color}`} />
+                  </div>
+                  
+                  <div className="relative z-10">
+                    <h3 className="text-4xl font-bold text-white tracking-tight mb-2">{card.title}</h3>
+                    <p className="text-slate-500 text-xs font-bold uppercase tracking-widest">{card.desc}</p>
+                  </div>
+
+                  <card.icon className={`absolute -right-12 -bottom-12 h-64 w-64 opacity-[0.03] group-hover:opacity-[0.1] transition-opacity duration-500 ${card.color} rotate-12`} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+
+      {/* =========================================
+          MODE 2: WORKSPACE (NAVBAR + CONTENT)
+         ========================================= */}
+      {viewMode === 'workspace' && (
+        <div className="relative z-10 flex-1 flex animate-in slide-in-from-right-10 duration-500">
+          
+          {/* NAVBAR */}
+          <Navbar 
+            activePage={activePage} 
+            onNavigate={setActivePage} 
+            onExit={exitWorkspace} 
+          />
+
+          {/* CONTENT AREA */}
+          <div className="flex-1 ml-24 overflow-y-auto h-screen">
+            
+            {activePage === 'sales' && (
+              <div className="min-h-full">
+                <SalesPage />
+              </div>
+            )}
+
+            {activePage === 'inventory' && (
+              <div className="p-8 min-h-full">
+                <InventoryPage onBack={exitWorkspace} />
+              </div>
+            )}
+
+            {activePage === 'history' && (
+              <div className="min-h-full">
+                 {/* THIS IS THE NEW PAGE */}
+                 <HistoryPage />
+              </div>
+            )}
+
+          </div>
+        </div>
+      )}
+
     </div>
   )
 }

@@ -6,34 +6,10 @@
   :root {
     --background: 224 71% 4%;
     --foreground: 210 40% 98%;
-    
-    /* Force Dark Cards */
-    --card: 224 71% 4%;
-    --card-foreground: 210 40% 98%;
-    
-    --popover: 224 71% 4%;
-    --popover-foreground: 210 40% 98%;
-    
-    /* Electric Blue */
-    --primary: 221.2 83.2% 53.3%;
-    --primary-foreground: 210 40% 98%;
-    
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-    
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-    
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
-    --ring: 224 76% 48%;
-    --radius: 0.75rem;
+    --ring: 212.7 26.8% 83.9%;
+    --radius: 0.5rem;
   }
 }
 
@@ -42,57 +18,106 @@
     @apply border-border;
   }
   body {
-    @apply bg-slate-950 text-foreground antialiased;
+    @apply bg-black text-foreground antialiased;
+    
+    /* YOUR FAVORITE BACKGROUND */
+    background-color: #030712;
     background-image: 
-      linear-gradient(rgba(15, 23, 42, 0.9), rgba(15, 23, 42, 0.9)),
-      linear-gradient(to right, #1e293b 1px, transparent 1px),
-      linear-gradient(to bottom, #1e293b 1px, transparent 1px);
-    background-size: 100% 100%, 40px 40px, 40px 40px;
+      radial-gradient(circle at 50% 0%, rgba(37, 99, 235, 0.25) 0%, transparent 60%),
+      radial-gradient(circle at 100% 0%, rgba(139, 92, 246, 0.2) 0%, transparent 50%),
+      linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 100% 100%, 100% 100%, 50px 50px, 50px 50px;
+    min-height: 100vh;
   }
 }
 
-/* --- FORCE NEON GLOW --- */
+/* --- NEXUS CUSTOM CLASSES (Unique to avoid conflicts) --- */
 
-/* Glowing Button */
-.btn-glow {
-  box-shadow: 0 0 15px rgba(59, 130, 246, 0.6) !important;
-  border: 1px solid rgba(96, 165, 250, 0.5) !important;
-  transition: all 0.3s ease !important;
+/* 1. The Panel Container */
+.nexus-panel {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
-.btn-glow:hover {
-  box-shadow: 0 0 25px rgba(59, 130, 246, 0.9) !important;
+
+/* 2. The Input Field (Pixel-Perfect) */
+.nexus-input {
+  appearance: none; /* Remove browser defaults */
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  height: 3rem; /* Fixed 48px */
+  width: 100%;
+  border-radius: 0.5rem;
+  padding-left: 3rem; /* EXACT space for icon */
+  padding-right: 1rem;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+.nexus-input:focus {
+  border-color: #3b82f6;
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+  outline: none;
+}
+
+/* 3. The Action Button */
+.nexus-btn-primary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.nexus-btn-primary:hover {
+  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  box-shadow: 0 0 30px rgba(59, 130, 246, 0.7);
   transform: translateY(-1px);
 }
 
-/* Glassmorphism Cards (The 'Transparent' Look) */
-.glass-card {
-  background: rgba(30, 41, 59, 0.4) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37) !important;
+/* 4. The Label Style */
+.nexus-label {
+  display: block;
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #94a3b8; /* Slate-400 */
+  margin-bottom: 0.5rem;
+  margin-left: 0.25rem;
 }
 
-/* Neon Text Header */
-.text-glow {
-  text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+/* --- STAR ANIMATIONS --- */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
 }
 
-/* Custom Input Fields (Darker, cleaner) */
-input {
-  background-color: rgba(15, 23, 42, 0.8) !important; 
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  color: white !important;
-}
-input:focus {
-  border-color: #3b82f6 !important;
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2) !important;
-  outline: none !important;
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
 }
 
-/* Modal/Dialog Fixes */
-[role="dialog"] {
-  background-color: #0f172a !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 0 50px rgba(0,0,0,0.8) !important;
+.star {
+  position: absolute;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 4s infinite ease-in-out;
+}
+
+.constellation-line {
+  position: absolute;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.3), transparent);
+  animation: float 10s infinite ease-in-out;
 }

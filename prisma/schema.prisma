@@ -5,34 +5,84 @@ generator client {
 
 datasource db {
   provider = "sqlite"
-  // Stable version NEEDS this line:
-  url      = "file:./shop.db"
+  url      = env("DATABASE_URL")
 }
 
-// ... (Your Category, Product, StockItem models below)
-model Category {
-  id        Int       @id @default(autoincrement())
-  name      String    @unique
-  products  Product[]
+// 1. SUPPLIERS
+model Supplier {
+  id      Int       @id @default(autoincrement())
+  name    String    @unique
+  contact String?
+  products Product[]
 }
 
+// 2. PRODUCTS
 model Product {
-  id          Int      @id @default(autoincrement())
-  name        String
-  brand       String   
-  price       Decimal  
-  cost        Decimal  
-  categoryId  Int
-  category    Category @relation(fields: [categoryId], references: [id])
-  stockItems  StockItem[]
-  createdAt   DateTime @default(now())
+  id             Int       @id @default(autoincrement())
+  itemCode       String    @unique
+  
+  name           String    
+  description    String? 
+  
+  supplierId     Int?
+  supplier       Supplier? @relation(fields: [supplierId], references: [id])
+  
+  // PRICING
+  costPrice      Decimal  @default(0)
+  wholesalePrice Decimal? @default(0)
+  sellingPrice   Decimal  @default(0)
+  
+  // DETAILS
+  warrantyType   String?
+  qty            Int      @default(0)
+  
+  // TRACKING
+  trackSerial    Boolean  @default(false)
+  stockItems     StockItem[]
+  
+  // HISTORY
+  lastBillNo     String?
+  lastBillDate   DateTime?
+
+  createdAt      DateTime @default(now())
 }
 
+// 3. SERIAL NUMBERS
 model StockItem {
   id           Int      @id @default(autoincrement())
   serialNumber String   @unique 
-  status       String   @default("AVAILABLE") 
+  status       String   @default("AVAILABLE") // AVAILABLE, SOLD
+  
   productId    Int
   product      Product  @relation(fields: [productId], references: [id])
+  
   addedAt      DateTime @default(now())
+}
+
+// 4. SALES & INVOICES (NEW)
+model Invoice {
+  id           Int          @id @default(autoincrement())
+  invoiceNo    String       @unique
+  customerName String?
+  date         DateTime     @default(now())
+  
+  totalAmount  Decimal      @default(0)
+  type         String       @default("INVOICE") // INVOICE or QUOTATION
+  
+  items        InvoiceItem[]
+}
+
+model InvoiceItem {
+  id           Int      @id @default(autoincrement())
+  
+  invoiceId    Int
+  invoice      Invoice  @relation(fields: [invoiceId], references: [id])
+  
+  itemCode     String
+  description  String
+  serialNumber String?
+  warranty     String?
+  qty          Int
+  unitPrice    Decimal
+  total        Decimal
 }
