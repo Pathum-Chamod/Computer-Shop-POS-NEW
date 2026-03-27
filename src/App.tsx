@@ -137,8 +137,7 @@ function App() {
                 <div 
                   key={i} 
                   onClick={card.action}
-                  className={`nexus-panel h-80 p-8 rounded-3xl relative overflow-hidden group transition-all cursor-pointer border hover:border-opacity-100 hover:-translate-y-4 hover:shadow-2xl flex flex-col justify-between backdrop-blur-md ${isDarkMode ? `hover:bg-white/[0.05] ${card.border}` : `bg-white/40 hover:bg-white/60 shadow-xl border-white/50`}`}
-                >
+                  className={`${isDarkMode ? 'nexus-panel border ' + card.border + ' hover:bg-white/[0.05]' : 'bg-white/80 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.05)] hover:bg-white/95'} h-80 p-8 rounded-3xl relative overflow-hidden group transition-all cursor-pointer hover:border-opacity-100 hover:-translate-y-4 hover:shadow-xl flex flex-col justify-between backdrop-blur-md`}                >
                   <div className={`p-5 rounded-2xl w-fit ${card.bg} transition-transform group-hover:scale-110 duration-500`}>
                     <card.icon className={`h-12 w-12 ${card.color}`} />
                   </div>
