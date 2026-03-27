@@ -98,7 +98,7 @@ function App() {
           <div className="flex justify-between items-center mb-16">
             <div>
               <h1 className="text-7xl font-black tracking-tighter text-white drop-shadow-[0_0_30px_rgba(59,130,246,0.4)]">
-                CODEWAVE <span className="text-blue-500">POS</span>
+                ALFASOFT <span className="text-blue-500">SYSTEMS</span>
               </h1>
               <div className="flex items-center gap-2 mt-4 pl-2">
                 <span className="relative flex h-3 w-3">
