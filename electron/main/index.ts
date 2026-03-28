@@ -11,7 +11,18 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 // --- DATABASE CONNECTION ---
 const { PrismaClient } = require('@prisma/client')
 
-const prisma = new PrismaClient()
+const isDev = !app.isPackaged
+const dbPath = isDev 
+  ? path.join(__dirname, '../../prisma/dev.db') 
+  : path.join(process.resourcesPath, 'prisma/dev.db')
+
+const prisma = new PrismaClient({
+  datasources: {
+    db: {
+      url: `file:${dbPath}`
+    }
+  }
+})
 // ---------------------------
 
 process.env.APP_ROOT = path.join(__dirname, '../..')
