@@ -60,7 +60,7 @@ async function createWindow() {
 
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL)
-    win.webContents.openDevTools()
+    // win.webContents.openDevTools() // Disabled auto-opening devtools
   } else {
     win.loadFile(indexHtml)
   }
