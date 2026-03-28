@@ -1,4 +1,4 @@
-import { ShoppingCart, Monitor, History, Home, LogOut } from 'lucide-react'
+import { ShoppingCart, Monitor, History, Home, LogOut, BarChart3, ShieldCheck, Settings, Wrench } from 'lucide-react'
 
 interface NavbarProps {
   activePage: string;
@@ -11,6 +11,10 @@ export function Navbar({ activePage, onNavigate, onExit }: NavbarProps) {
     { id: 'sales', label: 'Billing', icon: ShoppingCart },
     { id: 'inventory', label: 'Inventory', icon: Monitor },
     { id: 'history', label: 'History', icon: History },
+    { id: 'analyzer', label: 'Analyzer', icon: BarChart3 },
+    { id: 'warranty', label: 'Warranty', icon: ShieldCheck },
+    { id: 'manage', label: 'Manage', icon: Settings },
+    { id: 'repair', label: 'Repair', icon: Wrench },
   ]
 
   return (

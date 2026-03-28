@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Receipt, PackageCheck, BarChart3, ShieldCheck, Sun, Moon } from 'lucide-react'
+import { Receipt, PackageCheck, BarChart3, ShieldCheck, Sun, Moon, Settings, Wrench } from 'lucide-react'
 
 // Components
 import { InventoryPage } from "./components/InventoryPage"
@@ -66,11 +66,29 @@ function App() {
       bg: "bg-orange-500/10", 
       border: "border-orange-500/20",
       action: () => console.log("Navigate to Warranty")
+    },
+    { 
+      title: "Manage", 
+      desc: "Users & Settings", 
+      icon: Settings, 
+      color: "text-rose-400", 
+      bg: "bg-rose-500/10", 
+      border: "border-rose-500/20",
+      action: () => console.log("Navigate to Manage")
+    },
+    { 
+      title: "Repair", 
+      desc: "Service Tickets", 
+      icon: Wrench, 
+      color: "text-amber-400", 
+      bg: "bg-amber-500/10", 
+      border: "border-amber-500/20",
+      action: () => console.log("Navigate to Repair")
     }
   ]
 
   return (
-    <div className={`min-h-screen font-sans selection:bg-blue-500/30 relative overflow-hidden flex flex-col transition-colors duration-500 ${isDarkMode ? 'text-slate-100 dark bg-[#030712]' : 'text-slate-800 bg-sky-50'}`}>
+    <div className={`h-screen font-sans selection:bg-blue-500/30 relative overflow-hidden flex flex-col transition-colors duration-500 ${isDarkMode ? 'text-slate-100 dark bg-[#030712]' : 'text-slate-800 bg-sky-50'}`}>
       
       {/* --- GLOBAL BACKGROUND --- */}
       <div className={`fixed inset-0 z-0 pointer-events-none transition-colors duration-1000 ${isDarkMode ? 'bg-[#030712]' : ''}`}>
@@ -132,7 +150,7 @@ function App() {
 
           {/* CARDS */}
           <div className="flex-1 flex items-center justify-center pb-20">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 w-full max-w-7xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl">
               {mainCards.map((card, i) => (
                 <div 
                   key={i} 
@@ -173,19 +191,19 @@ function App() {
           <div className="flex-1 ml-24 overflow-y-auto h-screen">
             
             {activePage === 'sales' && (
-              <div className="min-h-full">
+              <div className="h-full">
                 <SalesPage />
               </div>
             )}
 
             {activePage === 'inventory' && (
-              <div className="p-8 min-h-full">
+              <div className="p-8 h-full">
                 <InventoryPage onBack={exitWorkspace} />
               </div>
             )}
 
             {activePage === 'history' && (
-              <div className="min-h-full">
+              <div className="h-full">
                  {/* THIS IS THE NEW PAGE */}
                  <HistoryPage />
               </div>
