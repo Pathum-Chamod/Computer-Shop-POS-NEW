@@ -183,9 +183,9 @@ export function InventoryPage() {
     <div className="w-full max-w-7xl mx-auto pb-20 animate-in fade-in slide-in-from-bottom-4 duration-500">
       
       {/* TOP BAR (Simplified without Back Button) */}
-      <div className="mb-8">
-        <h2 className="text-3xl font-black text-white tracking-tight">Billing & Inventory</h2>
-        <p className="text-slate-500 text-xs uppercase tracking-widest font-bold">Manage Stock & Sales</p>
+      <div className="mb-8 relative z-10">
+        <h2 className="text-3xl font-black text-white tracking-tight drop-shadow-[0_2px_10px_rgba(0,0,0,0.5)]">Billing & Inventory</h2>
+        <p className="text-slate-500 text-xs uppercase tracking-widest font-bold drop-shadow-[0_2px_5px_rgba(0,0,0,0.3)]">Manage Stock & Sales</p>
       </div>
 
       {/* FORM */}

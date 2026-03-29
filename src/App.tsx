@@ -115,27 +115,29 @@ function App() {
         )}
       </div>
 
-      {/* THEME TOGGLE (Floating) */}
-      <div className="fixed top-6 right-8 z-50">
-        <button 
-          onClick={() => setIsDarkMode(!isDarkMode)}
-          className={`p-3 rounded-full backdrop-blur-md transition-all duration-300 shadow-lg ${isDarkMode ? 'bg-white/10 text-yellow-300 hover:bg-white/20' : 'bg-white/50 text-amber-500 hover:bg-white/80 shadow-sky-300'}`}
-          title="Toggle Theme"
-        >
-          {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
-        </button>
-      </div>
+      {/* THEME TOGGLE (Dashboard Only) */}
+      {viewMode === 'dashboard' && (
+        <div className="fixed top-6 right-8 z-50">
+          <button 
+            onClick={() => setIsDarkMode(!isDarkMode)}
+            className={`p-3 rounded-full backdrop-blur-md transition-all duration-300 shadow-lg ${isDarkMode ? 'bg-white/10 text-yellow-300 hover:bg-white/20' : 'bg-white/50 text-amber-500 hover:bg-white/80 shadow-sky-300'}`}
+            title="Toggle Theme"
+          >
+            {isDarkMode ? <Sun size={24} /> : <Moon size={24} />}
+          </button>
+        </div>
+      )}
 
       {/* =========================================
           MODE 1: DASHBOARD (LANDING)
          ========================================= */}
       {viewMode === 'dashboard' && (
-        <div className="relative z-10 flex-1 flex flex-col p-12 animate-in fade-in zoom-in-95 duration-500">
+        <div className="relative z-10 flex-1 flex flex-col p-6 md:p-8 lg:p-12 overflow-y-auto animate-in fade-in zoom-in-95 duration-500">
           
           {/* HEADER */}
-          <div className="flex justify-between items-center mb-16">
+          <div className="flex justify-between items-center mb-8 shrink-0">
             <div>
-              <h1 className={`text-7xl font-black tracking-tighter drop-shadow-[0_0_30px_rgba(59,130,246,0.4)] ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
+              <h1 className={`text-5xl md:text-7xl font-black tracking-tighter drop-shadow-[0_0_30px_rgba(59,130,246,0.4)] ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>
                 ALFASOFT <span className="text-blue-500">SYSTEMS</span>
               </h1>
               <div className="flex items-center gap-2 mt-4 pl-2">
@@ -149,23 +151,23 @@ function App() {
           </div>
 
           {/* CARDS */}
-          <div className="flex-1 flex items-center justify-center pb-20">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-7xl">
+          <div className="flex-1 flex items-center justify-center pb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-7xl">
               {mainCards.map((card, i) => (
                 <div 
                   key={i} 
                   onClick={card.action}
-                  className={`${isDarkMode ? 'nexus-panel border ' + card.border + ' hover:bg-white/[0.05]' : 'bg-white/80 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.05)] hover:bg-white/95'} h-80 p-8 rounded-3xl relative overflow-hidden group transition-all cursor-pointer hover:border-opacity-100 hover:-translate-y-4 hover:shadow-xl flex flex-col justify-between backdrop-blur-md`}                >
-                  <div className={`p-5 rounded-2xl w-fit ${card.bg} transition-transform group-hover:scale-110 duration-500`}>
-                    <card.icon className={`h-12 w-12 ${card.color}`} />
+                  className={`${isDarkMode ? 'nexus-panel border ' + card.border + ' hover:bg-white/[0.05]' : 'bg-white/80 border border-white/60 shadow-[0_8px_30px_rgb(0,0,0,0.05)] hover:bg-white/95'} h-56 p-6 rounded-3xl relative overflow-hidden group transition-all cursor-pointer hover:border-opacity-100 hover:-translate-y-2 hover:shadow-xl flex flex-col justify-between backdrop-blur-md`}                >
+                  <div className={`p-4 rounded-xl w-fit ${card.bg} transition-transform group-hover:scale-110 duration-500`}>
+                    <card.icon className={`h-8 w-8 md:h-10 md:w-10 ${card.color}`} />
                   </div>
                   
                   <div className="relative z-10">
-                    <h3 className={`text-4xl font-bold tracking-tight mb-2 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{card.title}</h3>
-                    <p className={`text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>{card.desc}</p>
+                    <h3 className={`text-2xl md:text-3xl font-bold tracking-tight mb-1 ${isDarkMode ? 'text-white' : 'text-slate-800'}`}>{card.title}</h3>
+                    <p className={`text-[10px] md:text-xs font-bold uppercase tracking-widest ${isDarkMode ? 'text-slate-500' : 'text-slate-600'}`}>{card.desc}</p>
                   </div>
 
-                  <card.icon className={`absolute -right-12 -bottom-12 h-64 w-64 opacity-[0.03] group-hover:opacity-[0.1] transition-opacity duration-500 ${card.color} rotate-12`} />
+                  <card.icon className={`absolute -right-8 -bottom-8 h-48 w-48 opacity-[0.03] group-hover:opacity-[0.1] transition-opacity duration-500 ${card.color} rotate-12`} />
                 </div>
               ))}
             </div>
@@ -188,22 +190,22 @@ function App() {
           />
 
           {/* CONTENT AREA */}
-          <div className="flex-1 ml-24 overflow-y-auto h-screen">
+          <div className="flex-1 ml-24 h-screen flex flex-col relative overflow-hidden">
             
             {activePage === 'sales' && (
-              <div className="h-full">
+              <div className="flex-1 h-full overflow-hidden container-query-adjustments">
                 <SalesPage />
               </div>
             )}
 
             {activePage === 'inventory' && (
-              <div className="p-8 h-full">
+              <div className="p-8 flex-1 h-full overflow-y-auto">
                 <InventoryPage onBack={exitWorkspace} />
               </div>
             )}
 
             {activePage === 'history' && (
-              <div className="h-full">
+              <div className="flex-1 h-full overflow-y-auto">
                  {/* THIS IS THE NEW PAGE */}
                  <HistoryPage />
               </div>

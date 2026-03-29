@@ -12,7 +12,7 @@ export const DaySky = () => {
       </div>
 
       {/* --- 2. THE SUN (FOREGROUND) --- */}
-      <div className="absolute top-[10%] left-[20%] w-0 h-0 flex items-center justify-center z-10">
+      <div className="absolute top-[10%] left-[70%] w-0 h-0 flex items-center justify-center z-10">
         
         {/* High-fidelity Atmospheric Glow */}
         <div className="absolute w-[800px] h-[800px] rounded-full mix-blend-screen opacity-50" style={{ backgroundImage: 'radial-gradient(circle at center, rgba(255,255,255,0.6) 0%, rgba(150,210,255,0.1) 30%, transparent 60%)' }} />

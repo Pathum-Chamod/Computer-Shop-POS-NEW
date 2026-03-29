@@ -158,7 +158,7 @@ export function SalesPage() {
   const subTotal = cartItems.reduce((sum, item) => sum + item.total, 0)
 
   return (
-    <div className="sales-container">
+    <div className="absolute inset-0 flex bg-transparent overflow-hidden font-sans">
       
       {/* --- LEFT SIDE: FORM & CART --- */}
       <div className="flex-1 flex flex-col p-6 gap-6 relative overflow-hidden">
@@ -346,65 +346,68 @@ export function SalesPage() {
       </div>
 
       {/* --- RIGHT SIDE: TOTALS (UPDATED) --- */}
-      <div className="w-96 shrink-0">
-        <div className="sales-totals-panel">
+      <div className="w-96 shrink-0 h-full flex flex-col bg-slate-900/80 backdrop-blur-3xl border-l border-white/10 shadow-[-10px_0_40px_rgba(0,0,0,0.3)] z-50 overflow-hidden">
            
-           {/* 1. TOP SECTION: Details */}
-           <div className="panel-header">
-             <h3 className="text-white font-bold text-xl flex items-center gap-3">
-               <FileText className="h-6 w-6 text-blue-500" /> 
-               Payment Details
-             </h3>
-           </div>
-           
-           <div className="space-y-4">
-             <div className="payment-row">
-               <span>Subtotal</span>
-               <span>${subTotal.toFixed(2)}</span>
+           {/* SCROLLABLE CONTENT AREA */}
+           <div className="flex-1 overflow-y-auto p-6">
+             {/* 1. TOP SECTION: Details */}
+             <div className="mb-6 pb-4 border-b border-white/10">
+               <h3 className="text-white font-bold text-xl flex items-center gap-3">
+                 <FileText className="h-6 w-6 text-blue-500" /> 
+                 Payment Details
+               </h3>
              </div>
-             <div className="payment-row">
-               <span>Tax (0%)</span>
-               <span>$0.00</span>
+             
+             <div className="space-y-4">
+               <div className="payment-row">
+                 <span>Subtotal</span>
+                 <span>${subTotal.toFixed(2)}</span>
+               </div>
+               <div className="payment-row">
+                 <span>Tax (0%)</span>
+                 <span>$0.00</span>
+               </div>
+               <div className="payment-row">
+                 <span>Discount</span>
+                 <span className="text-red-400">-$0.00</span>
+               </div>
              </div>
-             <div className="payment-row">
-               <span>Discount</span>
-               <span className="text-red-400">-$0.00</span>
+
+             {/* 2. MIDDLE SECTION: Big Total */}
+             <div className="mt-6 text-right bg-white/[0.03] p-4 rounded-lg">
+               <span className="block text-[10px] font-bold tracking-[0.1em] text-slate-500 uppercase mb-1">Total Payable</span>
+               <div className="font-mono text-4xl font-black text-emerald-400 leading-none" style={{ textShadow: '0 0 30px rgba(16, 185, 129, 0.2)' }}>
+                 ${subTotal.toFixed(2)}
+               </div>
              </div>
            </div>
 
-           {/* 2. MIDDLE SECTION: Big Total */}
-           <div className="total-section">
-             <span className="total-label">Total Payable</span>
-             <div className="total-display">${subTotal.toFixed(2)}</div>
-           </div>
-
-           {/* 3. BOTTOM SECTION: Buttons */}
-           <div className="panel-footer">
+           {/* FIXED FOOTER AREA */}
+           <div className="shrink-0 p-6 bg-slate-900/40 border-t border-white/5 flex flex-col gap-3">
              <button 
                 onClick={() => processTransaction('INVOICE')}
-                className="sales-btn sales-btn-success h-14 text-lg shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"
+                className="sales-btn sales-btn-success h-12 text-lg shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/40"
              >
                <Printer className="mr-2 h-5 w-5" /> PRINT & SAVE
              </button>
              
-             <button onClick={() => processTransaction('QUOTATION')} className="sales-btn border border-blue-500/50 text-blue-400 hover:bg-blue-500/10">
+             <button onClick={() => processTransaction('QUOTATION')} className="sales-btn border border-blue-500/50 text-blue-400 hover:bg-blue-500/10 h-10 text-xs">
                 <FileText className="mr-2 h-4 w-4" /> SAVE QUOTATION
              </button>
 
-             <div className="action-grid">
+             <div className="grid grid-cols-2 gap-3 mt-1">
                <button 
                  onClick={() => setCartItems([])}
-                 className="sales-btn border border-white/10 text-slate-400 hover:bg-white/5 hover:text-white text-xs"
+                 className="sales-btn border border-white/10 text-slate-400 hover:bg-white/5 hover:text-white text-xs h-10"
                >
                  CLEAR
                </button>
-               <button className="sales-btn border border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300 text-xs">
+               <button className="sales-btn border border-red-500/30 text-red-400 hover:bg-red-500/10 hover:text-red-300 text-xs h-10">
                  CANCEL
                </button>
              </div>
            </div>
 
-        </div>
       </div>
 
     </div>

@@ -30,6 +30,7 @@
   font-weight: 800;
   color: white;
   letter-spacing: -0.025em;
+  text-shadow: 0 4px 15px rgba(0, 0, 0, 0.4), 0 0 30px rgba(0, 0, 0, 0.2);
 }
 
 .sales-header-subtitle {
@@ -218,4 +219,10 @@ select.sales-input {
   background-repeat: no-repeat;
   background-position: right 1rem center;
   background-size: 1em;
+}
+
+/* --- HIDE NATIVE DATE PICKER ICON (STOPS OVERLAPPING) --- */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    cursor: pointer;
 }
